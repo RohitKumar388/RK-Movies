@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Details - RK Movies</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="movies.js"></script>
+    <script src="navigation.js"></script>
+    <link rel="icon" href="rk.png" type="image/x-icon">
+
+    <!-- PNG favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="rk.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="rk.png">
+
+    <!-- Apple Touch Icon (for iOS like JioHotstar) -->
+    <link rel="apple-touch-icon" sizes="180x180" href="rk.png">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-text">RK</span>
+                </div>
+                <nav class="nav-menu" id="navMenu">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="#about" class="nav-link">About</a>
+                    <a href="#help" class="nav-link">Help</a>
+                    <a href="#settings" class="nav-link">Settings</a>
+                    <a href="#feedback" class="nav-link">Feedback</a>
+                    <a href="#bookings" class="nav-link">My Bookings</a>
+                    <a href="#contact" class="nav-link">Contact Us</a>
+                    <a href="#signin" class="nav-link">Sign In</a>
+                </nav>
+                <div class="header-actions">
+                    <button class="icon-btn" aria-label="Notifications">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <button class="icon-btn profile-btn" aria-label="My Profile">
+                        <i class="fas fa-user-circle"></i>
+                    </button>
+                </div>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Movie Detail Section -->
+    <section class="movie-detail-section">
+        <div class="container">
+            <div class="movie-detail-content" id="movieDetailContent">
+                <!-- Movie details will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Showtimes Section -->
+    <section class="showtimes-section">
+        <div class="container">
+            <h2 class="section-title">Select Date & Time</h2>
+            <div class="date-selector" id="dateSelector">
+                <!-- Dates will be dynamically generated -->
+            </div>
+
+            <div class="theaters-list" id="theatersList">
+                <!-- Theaters will be dynamically loaded -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-phone"></i> +91 123-456-7890</p>
+                    <p><i class="fas fa-envelope"></i> support@rkmovies.com</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Pune, Maharashtra, India</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <a href="#terms">Terms of Service</a>
+                    <a href="#privacy">Privacy Policy</a>
+                    <a href="#faq">FAQ</a>
+                    <a href="#about">About Us</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 RK Movies. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Get movie ID from URL
+        function getMovieIdFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('movie') || 'dark-knight'; // Default to dark-knight if no ID
+        }
+
+        // Load movie details
+        document.addEventListener('DOMContentLoaded', async function () {
+            const movieId = getMovieIdFromURL();
+            const movie = await getMovieById(movieId);
+
+            if (movie) {
+                loadMovieDetails(movie);
+                await loadShowtimes(movie);
+            } else {
+                // Redirect to home if movie not found
+                window.location.href = 'index.html';
+            }
+        });
+
+        function loadMovieDetails(movie) {
+            const container = document.getElementById('movieDetailContent');
+
+            container.innerHTML = `
+                <div class="movie-detail-poster">
+                    <img src="${movie.poster}" alt="${movie.title}">
+                    ${movie.rating ? `<div class="rating-badge large">${movie.rating}</div>` : ''}
+                </div>
+                <div class="movie-detail-info">
+                    <h1 class="movie-detail-title">${movie.title}</h1>
+                    <div class="movie-meta">
+                        ${movie.duration ? `<span class="meta-item"><i class="fas fa-clock"></i> ${movie.duration} min</span>` : ''}
+                        <span class="meta-item"><i class="fas fa-calendar"></i> ${movie.year}</span>
+                        <span class="meta-item"><i class="fas fa-film"></i> ${movie.genres.join(', ')}</span>
+                        <span class="meta-item"><i class="fas fa-globe"></i> ${Array.isArray(movie.language) ? movie.language.join(', ') : movie.language}</span>
+                        ${movie.status === 'upcoming' ? `<span class="meta-item" style="color: var(--accent-color); font-weight: bold;"><i class="fas fa-rocket"></i> Releasing on: ${movie.releaseDate}</span>` : ''}
+                    </div>
+                    <div class="movie-description">
+                        <h3>Synopsis</h3>
+                        <p>${movie.synopsis}</p>
+                    </div>
+                    <div class="movie-cast">
+                        <h3>Cast</h3>
+                        <div class="cast-list">
+                            ${movie.cast.map(actor => `<span class="cast-member">${actor}</span>`).join('')}
+                        </div>
+                    </div>
+                <div class="movie-actions">
+                    ${movie.status === 'now-showing' ? `
+                        <button class="btn-primary btn-large" onclick="proceedToBooking('${movie.id}')">
+                            <i class="fas fa-ticket-alt"></i> Book Tickets
+                        </button>
+                    ` : `
+                        <button class="btn-secondary btn-large" onclick="notifyMe('${movie.id}')">
+                            <i class="fas fa-bell"></i> Notify Me
+                        </button>
+                    `}
+                    ${movie.trailer ? `
+                        <button class="btn-secondary btn-large" onclick="openTrailer('${movie.trailer}')">
+                            <i class="fas fa-play"></i> Watch Trailer
+                        </button>
+                    ` : ''}
+                    <button class="btn-secondary btn-large" onclick="addToWatchlist('${movie.id}')">
+                        <i class="fas fa-heart"></i> Add to Watchlist
+                    </button>
+                </div>
+            </div>
+        `;
+        }
+
+        function openTrailer(videoUrl) {
+            const modal = document.createElement('div');
+            modal.className = 'video-modal-overlay';
+            modal.innerHTML = `
+            <div class="video-modal-content">
+                <button class="video-modal-close" onclick="closeTrailer()">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="video-container">
+                    <iframe src="${videoUrl}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                </div>
+            </div>
+        `;
+            document.body.appendChild(modal);
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+
+            // Close on click outside
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeTrailer();
+                }
+            });
+        }
+
+        function closeTrailer() {
+            const modal = document.querySelector('.video-modal-overlay');
+            if (modal) {
+                modal.remove();
+                document.body.style.overflow = ''; // Restore scrolling
+            }
+        }
+
+        async function loadShowtimes(movie) {
+            if (movie.status !== 'now-showing') {
+                document.querySelector('.showtimes-section').style.display = 'none';
+                return;
+            }
+
+            // Generate dates
+            const dateSelector = document.getElementById('dateSelector');
+            const dates = generateDates();
+            dateSelector.innerHTML = dates.map((date, index) => `
+                <button class="date-btn ${index === 0 ? 'active' : ''}" data-date="${date.value}" onclick="selectDate('${date.value}')">${date.label}</button>
+            `).join('');
+
+            // Store default date
+            if (dates.length > 0) {
+                sessionStorage.setItem('selectedDate', dates[0].value);
+            }
+
+            // Load theaters
+            const theatersList = document.getElementById('theatersList');
+            const theaters = await getAllTheaters();
+
+            theatersList.innerHTML = theaters.map(theater => `
+                <div class="theater-card">
+                    <div class="theater-info">
+                        <h3 class="theater-name">${theater.name}</h3>
+                        <p class="theater-address"><i class="fas fa-map-marker-alt"></i> ${theater.address}</p>
+                        <div class="theater-amenities">
+                            ${theater.amenities.map(amenity => `
+                                <span class="amenity"><i class="fas fa-${getAmenityIcon(amenity)}"></i> ${amenity}</span>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="showtimes">
+                        ${theater.screens[0].showtimes.map(time => `
+                            <button class="time-slot" onclick="selectShowtime('${movie.id}', '${theater.id}', '${theater.screens[0].id}', '${time}')">${time}</button>
+                        `).join('')}
+                    </div>
+                    <div class="theater-pricing">
+                        <span class="price">₹${theater.pricing.regular} - ₹${theater.pricing.premium}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function generateDates() {
+            const dates = [];
+            const today = new Date();
+            for (let i = 0; i < 5; i++) {
+                const date = new Date(today);
+                date.setDate(today.getDate() + i);
+                const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+                let label = '';
+                if (i === 0) label = `Today, ${monthNames[date.getMonth()]} ${date.getDate()}`;
+                else if (i === 1) label = `Tomorrow, ${monthNames[date.getMonth()]} ${date.getDate()}`;
+                else label = `${dayNames[date.getDay()]}, ${monthNames[date.getMonth()]} ${date.getDate()}`;
+
+                dates.push({
+                    label: label,
+                    value: date.toISOString().split('T')[0]
+                });
+            }
+            return dates;
+        }
+
+        function getAmenityIcon(amenity) {
+            const icons = {
+                'Recliner': 'couch',
+                'WiFi': 'wifi',
+                'Food Court': 'utensils',
+                'Parking': 'car'
+            };
+            return icons[amenity] || 'check';
+        }
+
+        async function selectShowtime(movieId, theaterId, screenId, time) {
+            // Need to fetch details to build the booking object if we want to pass it complete
+            // Or just pass IDs. For now, matching existing logic but adding async safety if needed.
+            // Actually, we should probably fetch the movie and theater objects to store in session for the next page
+            // to avoid re-fetching or inconsistent state.
+
+            const movie = await getMovieById(movieId);
+            const theater = await getTheaterById(theaterId);
+            const selectedDate = sessionStorage.getItem('selectedDate') || new Date().toISOString().split('T')[0];
+
+            const currentBooking = {
+                movie: movie,
+                theater: theater,
+                screen: theater.screens.find(s => s.id === screenId),
+                time: time,
+                date: selectedDate,
+                selectedLanguage: movie.language[0] // Default to first language
+            };
+
+            sessionStorage.setItem('currentBooking', JSON.stringify(currentBooking));
+
+            // Navigate to booking page
+            window.location.href = `booking.html`;
+        }
+
+        function proceedToBooking(movieId) {
+            // If no showtime selected, just go to booking page (logic may vary)
+            window.location.href = `booking.html?movie=${movieId}`;
+        }
+
+        async function notifyMe(movieId) {
+            const movie = await getMovieById(movieId);
+            if (movie) {
+                alert(`We'll notify you when "${movie.title}" is available for booking!`);
+            }
+        }
+
+        async function addToWatchlist(movieId) {
+            const movie = await getMovieById(movieId);
+            if (movie) {
+                alert(`"${movie.title}" added to your watchlist!`);
+            }
+        }
+
+        function selectDate(dateValue) {
+            sessionStorage.setItem('selectedDate', dateValue);
+            // Update active state
+            document.querySelectorAll('.date-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-date') === dateValue) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

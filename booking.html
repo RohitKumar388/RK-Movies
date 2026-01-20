@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Tickets - RK Movies</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="movies.js"></script>
+    <script src="navigation.js"></script>
+    <script src="booking.js"></script>
+    <link rel="icon" href="rk.png" type="image/x-icon">
+
+    <!-- PNG favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="rk.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="rk.png">
+
+    <!-- Apple Touch Icon (for iOS like JioHotstar) -->
+    <link rel="apple-touch-icon" sizes="180x180" href="rk.png">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-text">RK</span>
+                </div>
+                <nav class="nav-menu" id="navMenu">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="#about" class="nav-link">About</a>
+                    <a href="#help" class="nav-link">Help</a>
+                    <a href="#settings" class="nav-link">Settings</a>
+                    <a href="#feedback" class="nav-link">Feedback</a>
+                    <a href="#bookings" class="nav-link">My Bookings</a>
+                    <a href="#contact" class="nav-link">Contact Us</a>
+                    <a href="#signin" class="nav-link">Sign In</a>
+                </nav>
+                <div class="header-actions">
+                    <button class="icon-btn" aria-label="Notifications">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <button class="icon-btn profile-btn" aria-label="My Profile">
+                        <i class="fas fa-user-circle"></i>
+                    </button>
+                </div>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Booking Progress -->
+    <section class="booking-progress">
+        <div class="container">
+            <div class="progress-steps">
+                <div class="step active">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Select Seats</div>
+                </div>
+                <div class="step-line"></div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Snacks</div>
+                </div>
+                <div class="step-line"></div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Payment</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Content -->
+    <section class="booking-content-section">
+        <div class="container">
+            <div class="booking-layout">
+                <!-- Left: Movie Info & Seat Selection -->
+                <div class="booking-main">
+                    <div class="booking-movie-info" id="bookingMovieInfo">
+                        <!-- Movie info will be loaded dynamically -->
+                    </div>
+
+                    <div class="seat-selection">
+                        <h3>Select Your Seats</h3>
+                        <div class="screen-indicator">
+                            <div class="screen-label">SCREEN</div>
+                        </div>
+
+                        <div class="seat-map">
+                            <div class="seat-row">
+                                <span class="row-label">A</span>
+                                <div class="seats">
+                                    <button class="seat available" data-seat="A1">1</button>
+                                    <button class="seat available" data-seat="A2">2</button>
+                                    <button class="seat available" data-seat="A3">3</button>
+                                    <button class="seat available" data-seat="A4">4</button>
+                                    <button class="seat available" data-seat="A5">5</button>
+                                    <button class="seat occupied" data-seat="A6">6</button>
+                                    <button class="seat occupied" data-seat="A7">7</button>
+                                    <button class="seat available" data-seat="A8">8</button>
+                                    <button class="seat available" data-seat="A9">9</button>
+                                    <button class="seat available" data-seat="A10">10</button>
+                                </div>
+                            </div>
+                            <div class="seat-row">
+                                <span class="row-label">B</span>
+                                <div class="seats">
+                                    <button class="seat available" data-seat="B1">1</button>
+                                    <button class="seat available" data-seat="B2">2</button>
+                                    <button class="seat available" data-seat="B3">3</button>
+                                    <button class="seat occupied" data-seat="B4">4</button>
+                                    <button class="seat occupied" data-seat="B5">5</button>
+                                    <button class="seat available" data-seat="B6">6</button>
+                                    <button class="seat available" data-seat="B7">7</button>
+                                    <button class="seat available" data-seat="B8">8</button>
+                                    <button class="seat available" data-seat="B9">9</button>
+                                    <button class="seat available" data-seat="B10">10</button>
+                                </div>
+                            </div>
+                            <div class="seat-row">
+                                <span class="row-label">C</span>
+                                <div class="seats">
+                                    <button class="seat available" data-seat="C1">1</button>
+                                    <button class="seat available" data-seat="C2">2</button>
+                                    <button class="seat available" data-seat="C3">3</button>
+                                    <button class="seat available" data-seat="C4">4</button>
+                                    <button class="seat available" data-seat="C5">5</button>
+                                    <button class="seat available" data-seat="C6">6</button>
+                                    <button class="seat available" data-seat="C7">7</button>
+                                    <button class="seat available" data-seat="C8">8</button>
+                                    <button class="seat available" data-seat="C9">9</button>
+                                    <button class="seat available" data-seat="C10">10</button>
+                                </div>
+                            </div>
+                            <div class="seat-row">
+                                <span class="row-label">D</span>
+                                <div class="seats">
+                                    <button class="seat available premium" data-seat="D1">1</button>
+                                    <button class="seat available premium" data-seat="D2">2</button>
+                                    <button class="seat available premium" data-seat="D3">3</button>
+                                    <button class="seat available premium" data-seat="D4">4</button>
+                                    <button class="seat available premium" data-seat="D5">5</button>
+                                    <button class="seat available premium" data-seat="D6">6</button>
+                                    <button class="seat available premium" data-seat="D7">7</button>
+                                    <button class="seat available premium" data-seat="D8">8</button>
+                                    <button class="seat available premium" data-seat="D9">9</button>
+                                    <button class="seat available premium" data-seat="D10">10</button>
+                                </div>
+                            </div>
+                            <div class="seat-row">
+                                <span class="row-label">E</span>
+                                <div class="seats">
+                                    <button class="seat available premium" data-seat="E1">1</button>
+                                    <button class="seat available premium" data-seat="E2">2</button>
+                                    <button class="seat available premium" data-seat="E3">3</button>
+                                    <button class="seat available premium" data-seat="E4">4</button>
+                                    <button class="seat available premium" data-seat="E5">5</button>
+                                    <button class="seat available premium" data-seat="E6">6</button>
+                                    <button class="seat available premium" data-seat="E7">7</button>
+                                    <button class="seat available premium" data-seat="E8">8</button>
+                                    <button class="seat available premium" data-seat="E9">9</button>
+                                    <button class="seat available premium" data-seat="E10">10</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="seat-legend">
+                            <div class="legend-item">
+                                <div class="legend-seat available"></div>
+                                <span>Available</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-seat selected"></div>
+                                <span>Selected</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-seat occupied"></div>
+                                <span>Occupied</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-seat premium"></div>
+                                <span>Premium</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Snacks Selection -->
+                    <div class="snacks-selection" id="snacksSection" style="display: none;">
+                        <h3>Select Your Snacks & Beverages</h3>
+                        <div class="snacks-grid">
+                            <div class="snack-item" data-snack="popcorn-regular">
+                                <img src="https://i.pinimg.com/736x/56/57/37/565737bbd3d6af9c7f09d721c3b07e58.jpg"
+                                    alt="Regular Popcorn">
+                                <h4>Regular Popcorn</h4>
+                                <p class="snack-price">₹150</p>
+                                <div class="quantity-controls">
+                                    <button class="qty-btn" data-action="decrease">-</button>
+                                    <span class="quantity">0</span>
+                                    <button class="qty-btn" data-action="increase">+</button>
+                                </div>
+                            </div>
+                            <div class="snack-item" data-snack="popcorn-large">
+                                <img src="https://i.pinimg.com/736x/c0/52/99/c05299bcfead97a092f328f41ad00ae2.jpg"
+                                    alt="Large Popcorn">
+                                <h4>Large Popcorn</h4>
+                                <p class="snack-price">₹220</p>
+                                <div class="quantity-controls">
+                                    <button class="qty-btn" data-action="decrease">-</button>
+                                    <span class="quantity">0</span>
+                                    <button class="qty-btn" data-action="increase">+</button>
+                                </div>
+                            </div>
+                            <div class="snack-item" data-snack="nachos">
+                                <img src="https://i.pinimg.com/1200x/e5/c5/7b/e5c57b4babfada4a6a1bbcf8ae10c275.jpg"
+                                    alt="Nachos">
+                                <h4>Nachos</h4>
+                                <p class="snack-price">₹180</p>
+                                <div class="quantity-controls">
+                                    <button class="qty-btn" data-action="decrease">-</button>
+                                    <span class="quantity">0</span>
+                                    <button class="qty-btn" data-action="increase">+</button>
+                                </div>
+                            </div>
+                            <div class="snack-item" data-snack="hot-dog">
+                                <img src="https://i.pinimg.com/1200x/0a/c7/39/0ac739192601d2435836ff87220a723f.jpg"
+                                    alt="Hot Dog">
+                                <h4>Hot Dog</h4>
+                                <p class="snack-price">₹120</p>
+                                <div class="quantity-controls">
+                                    <button class="qty-btn" data-action="decrease">-</button>
+                                    <span class="quantity">0</span>
+                                    <button class="qty-btn" data-action="increase">+</button>
+                                </div>
+                            </div>
+                            <div class="snack-item" data-snack="coke">
+                                <img src="https://i.pinimg.com/1200x/ec/76/c1/ec76c1993c69fbb59f49a0eb7d95b42b.jpg"
+                                    alt="Coke">
+                                <h4>Coke (500ml)</h4>
+                                <p class="snack-price">₹80</p>
+                                <div class="quantity-controls">
+                                    <button class="qty-btn" data-action="decrease">-</button>
+                                    <span class="quantity">0</span>
+                                    <button class="qty-btn" data-action="increase">+</button>
+                                </div>
+                            </div>
+                            <div class="snack-item" data-snack="sprite">
+                                <img src="https://i.pinimg.com/1200x/42/70/aa/4270aae4532dc1e7bd2dacca2843d48b.jpg"
+                                    alt="Sprite">
+                                <h4>Sprite (500ml)</h4>
+                                <p class="snack-price">₹80</p>
+                                <div class="quantity-controls">
+                                    <button class="qty-btn" data-action="decrease">-</button>
+                                    <span class="quantity">0</span>
+                                    <button class="qty-btn" data-action="increase">+</button>
+                                </div>
+                            </div>
+                            <div class="snack-item" data-snack="chips">
+                                <img src="https://i.pinimg.com/736x/15/8e/15/158e1589baea6660d22ecdfa0d90d11e.jpg"
+                                    alt="Chips">
+                                <h4>Lays Chips</h4>
+                                <p class="snack-price">₹50</p>
+                                <div class="quantity-controls">
+                                    <button class="qty-btn" data-action="decrease">-</button>
+                                    <span class="quantity">0</span>
+                                    <button class="qty-btn" data-action="increase">+</button>
+                                </div>
+                            </div>
+                            <div class="snack-item" data-snack="chocolate">
+                                <img src="https://i.pinimg.com/1200x/c5/50/37/c550377d2f5f3fff665ae24c2455487b.jpg"
+                                    alt="Chocolate">
+                                <h4>Chocolate Bar</h4>
+                                <p class="snack-price">₹60</p>
+                                <div class="quantity-controls">
+                                    <button class="qty-btn" data-action="decrease">-</button>
+                                    <span class="quantity">0</span>
+                                    <button class="qty-btn" data-action="increase">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Booking Summary -->
+                <div class="booking-sidebar">
+                    <div class="booking-summary">
+                        <h3>Booking Summary</h3>
+                        <div class="summary-item">
+                            <span>Movie</span>
+                            <span id="summaryMovie">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Theater</span>
+                            <span id="summaryTheater">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Date & Time</span>
+                            <span id="summaryDateTime">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Screen</span>
+                            <span id="summaryScreen">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Language</span>
+                            <span id="summaryLanguage">-</span>
+                        </div>
+                        <div class="summary-seats">
+                            <span>Seats</span>
+                            <div class="selected-seats" id="selectedSeats">
+                                <span class="no-seats">No seats selected</span>
+                            </div>
+                        </div>
+                        <div class="summary-snacks" id="snacksSummary" style="display: none;">
+                            <span>Snacks</span>
+                            <div class="selected-snacks" id="selectedSnacks">
+                                <span class="no-snacks">No snacks selected</span>
+                            </div>
+                        </div>
+                        <div class="summary-pricing">
+                            <div class="price-row">
+                                <span>Tickets (<span id="ticketCount">0</span>)</span>
+                                <span>₹<span id="ticketPrice">0</span></span>
+                            </div>
+                            <div class="price-row" id="snacksPriceRow" style="display: none;">
+                                <span>Snacks</span>
+                                <span>₹<span id="snacksPrice">0</span></span>
+                            </div>
+                            <div class="price-row">
+                                <span>Convenience Fee</span>
+                                <span>₹<span id="convenienceFee">0</span></span>
+                            </div>
+                            <div class="price-row total">
+                                <span>Total</span>
+                                <span>₹<span id="totalPrice">0</span></span>
+                            </div>
+                        </div>
+                        <div class="booking-actions">
+                            <button class="btn-secondary" id="backBtn" style="display: none;">Back to Seats</button>
+                            <button class="btn-primary btn-large" id="proceedBtn" disabled>
+                                Proceed to Snacks
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-phone"></i> +91 123-456-7890</p>
+                    <p><i class="fas fa-envelope"></i> support@rkmovies.com</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Pune, Maharashtra, India</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <a href="#terms">Terms of Service</a>
+                    <a href="#privacy">Privacy Policy</a>
+                    <a href="#faq">FAQ</a>
+                    <a href="#about">About Us</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 RK Movies. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Get booking details from URL or sessionStorage
+        function getBookingDetails() {
+            const params = new URLSearchParams(window.location.search);
+            const movieId = params.get('movie') || sessionStorage.getItem('bookingMovieId') || 'dark-knight';
+            const theaterId = params.get('theater') || sessionStorage.getItem('bookingTheaterId') || 'pvr-koregaon';
+            const screenId = params.get('screen') || sessionStorage.getItem('bookingScreenId') || 'screen-3';
+            const time = params.get('time') || sessionStorage.getItem('bookingTime') || '7:00 PM';
+
+            // Get selected date or use today
+            const selectedDate = sessionStorage.getItem('selectedDate') || new Date().toISOString().split('T')[0];
+
+            return { movieId, theaterId, screenId, time, selectedDate };
+        }
+
+        // Load booking information
+        document.addEventListener('DOMContentLoaded', async function () {
+            const booking = getBookingDetails();
+            const movie = await getMovieById(booking.movieId);
+            const theater = await getTheaterById(booking.theaterId);
+            const screen = theater?.screens.find(s => s.id === booking.screenId) || theater?.screens[0];
+
+            if (!movie) {
+                alert('Movie not found. Redirecting to home...');
+                window.location.href = 'index.html';
+                return;
+            }
+            if (!theater) {
+                alert('Theater not found. Redirecting to home...');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Format date
+            const date = new Date(booking.selectedDate);
+            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const formattedDate = `${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+
+            // Load movie info
+            const movieInfoContainer = document.getElementById('bookingMovieInfo');
+
+            // Handle language selection
+            let availableLanguages = [];
+            if (Array.isArray(movie.language)) {
+                availableLanguages = movie.language;
+            } else if (typeof movie.language === 'string') {
+                // Handle comma-separated languages like "English, Hindi"
+                availableLanguages = movie.language.split(',').map(lang => lang.trim());
+            }
+
+            const languageOptions = availableLanguages.map(lang =>
+                `<option value="${lang}">${lang}</option>`
+            ).join('');
+
+            movieInfoContainer.innerHTML = `
+                <img src="${movie.thumbnail}" alt="${movie.title}">
+                <div class="booking-movie-details">
+                    <h2>${movie.title}</h2>
+                    <div class="language-selection">
+                        <label for="languageSelect"><i class="fas fa-globe"></i> Select Language:</label>
+                        <select id="languageSelect" class="language-select">
+                            ${languageOptions}
+                        </select>
+                    </div>
+                    <p><i class="fas fa-map-marker-alt"></i> ${theater.name}</p>
+                    <p><i class="fas fa-calendar"></i> ${formattedDate} | ${booking.time}</p>
+                    <p><i class="fas fa-film"></i> ${screen.name}</p>
+                </div>
+            `;
+
+            // Update summary
+            document.getElementById('summaryMovie').textContent = movie.title;
+            document.getElementById('summaryTheater').textContent = theater.name;
+            document.getElementById('summaryDateTime').textContent = `${formattedDate} | ${booking.time}`;
+            document.getElementById('summaryScreen').textContent = screen.name;
+            document.getElementById('summaryLanguage').textContent = availableLanguages[0]; // Default language
+
+            // Store in sessionStorage for later use
+            sessionStorage.setItem('currentBooking', JSON.stringify({
+                movie: movie,
+                theater: theater,
+                screen: screen,
+                time: booking.time,
+                date: booking.selectedDate,
+                selectedLanguage: availableLanguages[0] // Default to first available language
+            }));
+
+            // Add event listener for language selection
+            const languageSelect = document.getElementById('languageSelect');
+            if (languageSelect) {
+                languageSelect.addEventListener('change', function () {
+                    const currentBooking = JSON.parse(sessionStorage.getItem('currentBooking') || '{}');
+                    currentBooking.selectedLanguage = this.value;
+                    sessionStorage.setItem('currentBooking', JSON.stringify(currentBooking));
+
+                    // Update summary display
+                    document.getElementById('summaryLanguage').textContent = this.value;
+                });
+            }
+
+            // Initialize booking summary display
+            updateBookingSummaryDisplay();
+        });
+
+        function updateBookingSummaryDisplay() {
+            // This ensures the summary is visible even if no seats are selected yet
+            const selectedSeatsContainer = document.getElementById('selectedSeats');
+            if (selectedSeatsContainer && selectedSeatsContainer.innerHTML.trim() === '') {
+                selectedSeatsContainer.innerHTML = '<span class="no-seats">No seats selected</span>';
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - RK Movies</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="movies.js"></script>
+    <script src="navigation.js"></script>
+    <script src="payment.js"></script>
+    <link rel="icon" href="rk.png" type="image/x-icon">
+
+    <!-- PNG favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="rk.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="rk.png">
+
+    <!-- Apple Touch Icon (for iOS like JioHotstar) -->
+    <link rel="apple-touch-icon" sizes="180x180" href="rk.png">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-text">RK</span>
+                </div>
+                <nav class="nav-menu" id="navMenu">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="#about" class="nav-link">About</a>
+                    <a href="#help" class="nav-link">Help</a>
+                    <a href="#settings" class="nav-link">Settings</a>
+                    <a href="#feedback" class="nav-link">Feedback</a>
+                    <a href="#bookings" class="nav-link">My Bookings</a>
+                    <a href="#contact" class="nav-link">Contact Us</a>
+                    <a href="#signin" class="nav-link">Sign In</a>
+                </nav>
+                <div class="header-actions">
+                    <button class="icon-btn" aria-label="Notifications">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <button class="icon-btn profile-btn" aria-label="My Profile">
+                        <i class="fas fa-user-circle"></i>
+                    </button>
+                </div>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="booking-progress">
+        <div class="container">
+            <div class="progress-steps">
+                <div class="step completed">
+                    <div class="step-number">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="step-label">Select Seats</div>
+                </div>
+                <div class="step-line completed"></div>
+                <div class="step completed">
+                    <div class="step-number">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="step-label">Snacks</div>
+                </div>
+                <div class="step-line completed"></div>
+                <div class="step active">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Payment</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="payment-content-section">
+        <div class="container">
+            <div class="payment-layout">
+                <div class="payment-main">
+                    <h2>Choose Payment Method</h2>
+                    <div class="payment-options">
+                        <div class="payment-option" data-method="card">
+                            <div class="payment-option-header">
+                                <i class="fas fa-credit-card"></i>
+                                <h3>Credit/Debit Card</h3>
+                            </div>
+                            <p>Pay securely with your credit or debit card</p>
+                        </div>
+                        <div class="payment-option" data-method="netbanking">
+                            <div class="payment-option-header">
+                                <i class="fas fa-university"></i>
+                                <h3>Net Banking</h3>
+                            </div>
+                            <p>Pay through your bank's online banking</p>
+                        </div>
+                        <div class="payment-option" data-method="upi">
+                            <div class="payment-option-header">
+                                <i class="fas fa-mobile-alt"></i>
+                                <h3>UPI</h3>
+                            </div>
+                            <p>Pay using UPI apps like Google Pay, PhonePe, Paytm</p>
+                        </div>
+                    </div>
+
+                    <div class="payment-form" id="cardForm" style="display: none;">
+                        <h3>Enter Card Details</h3>
+                        <form id="cardPaymentForm">
+                            <div class="form-group">
+                                <label for="cardNumber">Card Number</label>
+                                <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="expiryDate">Expiry Date</label>
+                                    <input type="text" id="expiryDate" placeholder="MM/YY" maxlength="5" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cvv">CVV</label>
+                                    <input type="text" id="cvv" placeholder="123" maxlength="4" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="cardName">Name on Card</label>
+                                <input type="text" id="cardName" placeholder="John Doe" required>
+                            </div>
+                            <button type="submit" class="btn-primary btn-large btn-block">
+                                Pay ₹<span id="cardTotalAmount">0</span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="payment-form" id="netbankingForm" style="display: none;">
+                        <h3>Select Your Bank</h3>
+                        <form id="netbankingPaymentForm">
+                            <div class="form-group">
+                                <label for="bankSelect">Choose Bank</label>
+                                <select id="bankSelect" required>
+                                    <option value="">Select Bank</option>
+                                    <option value="sbi">State Bank of India</option>
+                                    <option value="hdfc">HDFC Bank</option>
+                                    <option value="icici">ICICI Bank</option>
+                                    <option value="axis">Axis Bank</option>
+                                    <option value="kotak">Kotak Mahindra Bank</option>
+                                    <option value="pnb">Punjab National Bank</option>
+                                    <option value="union">Union Bank</option>
+                                    <option value="idbi">IDBI Bank</option>
+                                    <option value="yes">Yes Bank</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="customerId">Customer ID / User ID</label>
+                                <input type="text" id="customerId" placeholder="Enter your Customer ID" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="bankPassword">Password</label>
+                                <input type="password" id="bankPassword" placeholder="Enter your password" required>
+                            </div>
+                            <button type="submit" class="btn-primary btn-large btn-block">
+                                Proceed to Bank Login
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="payment-form" id="upiForm" style="display: none;">
+                        <h3>Pay with UPI</h3>
+                        <div class="upi-payment-container">
+                            <div class="upi-qr-section">
+                                <div class="qr-code-wrapper">
+                                    <div class="qr-code">
+                                        <img src="qr code.jpeg" alt="UPI QR Code" class="upi-qr-image">
+                                    </div>
+                                    <p class="qr-instruction">Scan with any UPI app</p>
+                                </div>
+                                
+                                <div class="upi-payment-details">
+                                    <div class="upi-detail-item">
+                                        <span class="detail-label">UPI ID:</span>
+                                        <span class="detail-value">rkmovies@upi</span>
+                                    </div>
+                                    <div class="upi-detail-item">
+                                        <span class="detail-label">Amount:</span>
+                                        <span class="detail-value">₹<span id="upiTotalAmount">0</span></span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="upi-apps-section">
+                                <div class="upi-divider">
+                                    <span>or pay using</span>
+                                </div>
+                                <div class="upi-app-icons">
+                                    <img src="https://cdn-icons-png.flaticon.com/128/6124/6124998.png" alt="Google Pay" title="Google Pay">
+                                    <img src="https://i.pinimg.com/1200x/10/16/93/10169346a15f48f251e88b9b8e8c5d9a.jpg" alt="PhonePe" title="PhonePe">
+                                    <img src="https://cdn-icons-png.flaticon.com/128/825/825454.png" alt="Paytm" title="Paytm">
+                                    <img src="https://i.pinimg.com/1200x/56/b0/c6/56b0c6950ebdc386e584107fe700f684.jpg" alt="Amazon Pay" title="Amazon Pay">
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn-primary btn-large btn-block" id="upiCompleteBtn" type="button" style="margin-top: 2rem;">
+                            <i class="fas fa-check-circle"></i> I've Completed the Payment
+                        </button>
+                    </div>
+                </div>
+
+                <div class="payment-sidebar">
+                    <div class="order-summary">
+                        <h3>Order Summary</h3>
+                        <div class="summary-item">
+                            <span>Movie</span>
+                            <span id="summaryMovie">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Theater</span>
+                            <span id="summaryTheater">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Date & Time</span>
+                            <span id="summaryDateTime">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Language</span>
+                            <span id="summaryLanguage">-</span>
+                        </div>
+                        <div class="summary-seats">
+                            <span>Seats (<span id="ticketCount">0</span>)</span>
+                            <div class="selected-seats" id="selectedSeats">
+                                <span class="no-seats">No seats selected</span>
+                            </div>
+                        </div>
+                        <div class="summary-snacks" id="snacksSummary" style="display: none;">
+                            <span>Snacks</span>
+                            <div class="selected-snacks" id="selectedSnacks">
+                                <span class="no-snacks">No snacks selected</span>
+                            </div>
+                        </div>
+                        <div class="summary-pricing">
+                            <div class="price-row">
+                                <span>Tickets</span>
+                                <span>₹<span id="ticketPrice">0</span></span>
+                            </div>
+                            <div class="price-row" id="snacksPriceRow" style="display: none;">
+                                <span>Snacks</span>
+                                <span>₹<span id="snacksPrice">0</span></span>
+                            </div>
+                            <div class="price-row">
+                                <span>Convenience Fee</span>
+                                <span>₹<span id="convenienceFee">0</span></span>
+                            </div>
+                            <div class="price-row total">
+                                <span>Total</span>
+                                <span>₹<span id="totalPrice">0</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-phone"></i> +91 123-456-7890</p>
+                    <p><i class="fas fa-envelope"></i> support@rkmovies.com</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Pune, Maharashtra, India</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <a href="#terms">Terms of Service</a>
+                    <a href="#privacy">Privacy Policy</a>
+                    <a href="#faq">FAQ</a>
+                    <a href="#about">About Us</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 RK Movies. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>

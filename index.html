@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RK Movies - Book Your Tickets Online</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="movies.js"></script>
+    <script src="navigation.js"></script>
+    <!-- Favicon -->
+    <link rel="icon" href="rk.png" type="image/x-icon">
+
+    <!-- PNG favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="rk.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="rk.png">
+
+    <!-- Apple Touch Icon (for iOS like JioHotstar) -->
+    <link rel="apple-touch-icon" sizes="180x180" href="rk.png">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-text">RK</span>
+                </div>
+                <nav class="nav-menu" id="navMenu">
+                    <a href="index.html" class="nav-link active">Home</a>
+                    <a href="#about" class="nav-link">About</a>
+                    <a href="#help" class="nav-link">Help</a>
+                    <a href="#settings" class="nav-link">Settings</a>
+                    <a href="#feedback" class="nav-link">Feedback</a>
+                    <a href="#bookings" class="nav-link">My Bookings</a>
+                    <a href="#contact" class="nav-link">Contact Us</a>
+                    <a href="#signin" class="nav-link">Sign In</a>
+                </nav>
+                <div class="header-actions">
+                    <button class="icon-btn" aria-label="Notifications">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <button class="icon-btn profile-btn" aria-label="My Profile">
+                        <i class="fas fa-user-circle"></i>
+                    </button>
+                </div>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section with Carousel -->
+    <section class="hero-section">
+        <div class="carousel-container">
+            <div class="carousel-slides" id="carouselSlides">
+                <div class="carousel-slide active">
+                    <img src="dhurandar.jpg" alt="Movie 1">
+                    <div class="carousel-overlay"></div>
+                </div>
+                <div class="carousel-slide">
+                    <img src="https://i.pinimg.com/1200x/56/92/9c/56929c8f20ef18a039318e733b54c324.jpg" alt="Movie 2">
+                    <div class="carousel-overlay"></div>
+                </div>
+                <div class="carousel-slide">
+                    <img src="https://i.pinimg.com/1200x/74/7f/42/747f42bfcf727ee39f21662ebcc8a186.jpg" alt="Movie 3">
+                    <div class="carousel-overlay"></div>
+                </div>
+            </div>
+            <button class="carousel-btn carousel-prev" id="carouselPrev" aria-label="Previous slide">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="carousel-btn carousel-next" id="carouselNext" aria-label="Next slide">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            <div class="carousel-indicators">
+                <span class="indicator active" data-slide="0"></span>
+                <span class="indicator" data-slide="1"></span>
+                <span class="indicator" data-slide="2"></span>
+            </div>
+        </div>
+
+        <!-- Search Bar Overlay -->
+        <div class="search-overlay">
+            <div class="container">
+                <div class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Search movies, theaters, events…">
+                    <button class="search-btn">Search</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location & Filters -->
+    <section class="location-filters">
+        <div class="container">
+            <div class="location-selector">
+                <label for="citySelect">City:</label>
+                <select id="citySelect" class="city-dropdown">
+                    <option value="pune" selected>Pune</option>
+                    <option value="mumbai">Mumbai</option>
+                    <option value="delhi">Delhi</option>
+                    <option value="bangalore">Bangalore</option>
+                    <option value="hyderabad">Hyderabad</option>
+                </select>
+                <i class="fas fa-chevron-down dropdown-icon"></i>
+            </div>
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Genre</label>
+                    <select class="filter-select">
+                        <option>All Genres</option>
+                        <option>Action</option>
+                        <option>Comedy</option>
+                        <option>Drama</option>
+                        <option>Thriller</option>
+                        <option>Horror</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Date</label>
+                    <select class="filter-select">
+                        <option>Today</option>
+                        <option>Tomorrow</option>
+                        <option>This Week</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Language</label>
+                    <select class="filter-select">
+                        <option>All Languages</option>
+                        <option>Hindi</option>
+                        <option>English</option>
+                        <option>Marathi</option>
+                        <option>Tamil</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Rating</label>
+                    <select class="filter-select">
+                        <option>All Ratings</option>
+                        <option>4+ Stars</option>
+                        <option>3+ Stars</option>
+                        <option>2+ Stars</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Now Showing Section -->
+    <section class="movie-section">
+        <div class="container">
+            <h2 class="section-title">Now Showing</h2>
+            <div class="movie-carousel" id="nowShowing">
+                <!-- Movies will be dynamically loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Upcoming Releases Section -->
+    <section class="movie-section">
+        <div class="container">
+            <h2 class="section-title">Upcoming Releases</h2>
+            <div class="movie-carousel" id="upcomingReleases">
+                <!-- Movies will be dynamically loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- My Bookings Section -->
+    <section class="bookings-section" id="bookings">
+        <div class="container">
+            <h2 class="section-title">My Bookings</h2>
+            <div class="bookings-tabs">
+                <button class="tab-btn active" data-tab="upcoming">Upcoming</button>
+                <button class="tab-btn" data-tab="past">Past Bookings</button>
+            </div>
+
+            <div class="bookings-content">
+                <div class="tab-content active" id="upcomingTab">
+                    <div class="empty-bookings">
+                        <div class="empty-icon">
+                            <i class="fas fa-calendar-times"></i>
+                        </div>
+                        <h3>No Upcoming Bookings</h3>
+                        <p>You haven't booked any tickets yet. Start exploring movies and book your first show!</p>
+                        <a href="#movies" class="btn-primary">Browse Movies</a>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="pastTab">
+                    <div class="empty-bookings">
+                        <div class="empty-icon">
+                            <i class="fas fa-history"></i>
+                        </div>
+                        <h3>No Past Bookings</h3>
+                        <p>Your booking history will appear here once you watch movies.</p>
+                        <a href="#movies" class="btn-secondary">Browse Movies</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-phone"></i> +91 123-456-7890</p>
+                    <p><i class="fas fa-envelope"></i> support@rkmovies.com</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Pune, Maharashtra, India</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <a href="#terms">Terms of Service</a>
+                    <a href="#privacy">Privacy Policy</a>
+                    <a href="#faq">FAQ</a>
+                    <a href="#about">About Us</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 RK Movies. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Load movies on page load
+        document.addEventListener('DOMContentLoaded', async function () {
+            await loadNowShowingMovies();
+            await loadUpcomingMovies();
+        });
+
+        async function loadNowShowingMovies() {
+            const container = document.getElementById('nowShowing');
+            const nowShowingMovies = await getNowShowingMovies();
+
+            container.innerHTML = nowShowingMovies.map(movie => `
+                <div class="movie-card">
+                    <div class="movie-poster">
+                        <img src="${movie.thumbnail}" alt="${movie.title}">
+                        <div class="rating-badge">${movie.rating}</div>
+                        <div class="genre-tags">
+                            ${movie.genres.map(genre => `<span class="tag">${genre}</span>`).join('')}
+                        </div>
+                    </div>
+                    <div class="movie-info">
+                        <h3 class="movie-title">${movie.title}</h3>
+                        <p class="movie-duration">${movie.duration} min</p>
+                        <button class="btn-primary book-btn" onclick="bookMovie('${movie.id}')">Book Now</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function loadUpcomingMovies() {
+            const container = document.getElementById('upcomingReleases');
+            const upcomingMovies = await getUpcomingMovies();
+
+            container.innerHTML = upcomingMovies.map(movie => `
+                <div class="movie-card" onclick="window.location.href='movie-detail.html?movie=${movie.id}'">
+                    <div class="movie-poster">
+                        <img src="${movie.thumbnail}" alt="${movie.title}">
+                        <div class="rating-badge coming-soon">Coming Soon</div>
+                        <div class="genre-tags">
+                            ${movie.genres.map(genre => `<span class="tag">${genre}</span>`).join('')}
+                        </div>
+                    </div>
+                    <div class="movie-info">
+                        <h3 class="movie-title">${movie.title}</h3>
+                        <p class="movie-duration">Releases: ${movie.releaseDate}</p>
+                        <button class="btn-secondary notify-btn" onclick="event.stopPropagation(); notifyMe('${movie.id}')">Notify Me</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function bookMovie(movieId) {
+            window.location.href = `movie-detail.html?movie=${movieId}`;
+        }
+
+        async function notifyMe(movieId) {
+            const movie = await getMovieById(movieId);
+            if (movie) {
+                alert(`We'll notify you when "${movie.title}" is available for booking!`);
+            }
+        }
+    </script>
+</body>
+
+</html>
