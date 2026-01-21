@@ -200,9 +200,33 @@ body {
 }
 .hero-section {
     position: relative;
-    height: 500px;
+    height: 414px;
     overflow: hidden;
     margin-bottom: 2rem;
+     padding: 2rem 0;
+    /* md:py-8 */
+    background: transparent;
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        height: 332px;
+        /* 300px + 32px padding */
+        padding: 1rem 0;
+        /* py-4 */
+    }
+}
+@media (max-width: 768px) {
+    .hero-section {
+        height: 300px;
+    }
+}
+@media (max-width: 480px) {
+    .hero-section {
+        
+        height: 232px;
+        /* 200px image + 32px padding */
+    }
 }
 
 .carousel-container,
@@ -220,6 +244,9 @@ body {
     height: 100%;
     opacity: 0;
     transition: opacity 0.8s ease-in-out;
+        display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .carousel-slide.active {
@@ -227,27 +254,33 @@ body {
 }
 
 .carousel-slide img {
-    width: 100%;
+    width: 85%;
     height: 100%;
     object-fit: cover;
+     border-radius: 0.75rem;
+    /* rounded-xl */
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    /* shadow-2xl */
+    transition: all 0.3s ease;
+    display: block;
+    margin: 0 auto;
 }
 
-.carousel-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7));
+/* Responsive Image Widths */
+@media (max-width: 1024px) {
+    .carousel-slide img {
+        width: 95%;
+        /* w-[95%] for smaller screens */
+    }
 }
 
 .carousel-btn {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.05);
     border: none;
-    color: white;
+    color: var(--text-primary);
     font-size: 1.5rem;
     padding: 1rem;
     cursor: pointer;
@@ -262,8 +295,10 @@ body {
 }
 
 .carousel-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
+     background: rgba(0, 0, 0, 0.1);
+    color: var(--primary-color);
 }
+
 
 .carousel-prev {
     left: 20px;
@@ -275,7 +310,7 @@ body {
 
 .carousel-indicators {
     position: absolute;
-    bottom: 20px;
+    bottom: 40px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -287,13 +322,13 @@ body {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.5);
+     background: rgba(0, 0, 0, 0.2);
     cursor: pointer;
     transition: var(--transition);
 }
 
 .indicator.active {
-    background: white;
+   background: var(--primary-color);
     width: 30px;
     border-radius: 6px;
 }
@@ -2566,3 +2601,4 @@ body {
     height: 100%;
     border: 0;
 }
+
