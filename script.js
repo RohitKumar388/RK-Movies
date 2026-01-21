@@ -211,8 +211,26 @@ timeSlots.forEach(slot => {
 // ============================================
 // Search Functionality
 // ============================================
-const searchInput = document.querySelector('.search-input');
-const searchBtn = document.querySelector('.search-btn');
+const searchToggle = document.getElementById('searchToggle');
+const headerSearch = document.getElementById('headerSearch');
+const searchInput = document.querySelector('.header-search-input'); // Reusing variable name
+const searchBtn = document.querySelector('.header-search-btn');
+
+if (searchToggle && headerSearch) {
+    searchToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        headerSearch.classList.toggle('active');
+        if (headerSearch.classList.contains('active')) {
+            searchInput.focus();
+        }
+    });
+    // Close when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!headerSearch.contains(e.target) && !searchToggle.contains(e.target)) {
+            headerSearch.classList.remove('active');
+        }
+    });
+}// Reusing variable name
 
 if (searchInput && searchBtn) {
     function performSearch() {
