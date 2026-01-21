@@ -22,6 +22,7 @@ A modern, user-friendly movie booking website UI inspired by BookMyShow and Dist
 - Theater listings with amenities
 - Time slot selection
 - Pricing information
+<img width="2816" height="1536" alt="icon assembly" src="https://github.com/user-attachments/assets/a5154858-b3fe-41c4-bd4a-28ba289c8b46" />
 
 ### 🎫 Booking Page
 - Progress indicator (Select Seats → Snacks → Payment)
@@ -147,3 +148,4 @@ This project is open source and available for personal and commercial use.
 ---
 
 **Built with ❤️ for modern movie booking experiences**
+
