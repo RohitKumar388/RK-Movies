@@ -39,6 +39,13 @@
                     <a href="#signin" class="nav-link">Sign In</a>
                 </nav>
                 <div class="header-actions">
+                      <button class="icon-btn" id="searchToggle" aria-label="Search">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <div class="header-search-container" id="headerSearch">
+                        <input type="text" class="header-search-input" placeholder="Search movies, theaters, events...">
+                        <button class="header-search-btn"><i class="fas fa-arrow-right"></i></button>
+                    </div>
                     <button class="icon-btn" aria-label="Notifications">
                         <i class="fas fa-bell"></i>
                     </button>
@@ -58,41 +65,11 @@
         <div class="carousel-container">
             <div class="carousel-slides" id="carouselSlides">
                 <div class="carousel-slide active">
-                    <img src="dhurandar.jpg" alt="Movie 1">
+                    <img src="WhatsApp Image 2026-01-21 at 5.22.28 PM.jpeg" alt="RK Movies">
                     <div class="carousel-overlay"></div>
                 </div>
-                <div class="carousel-slide">
-                    <img src="https://i.pinimg.com/1200x/56/92/9c/56929c8f20ef18a039318e733b54c324.jpg" alt="Movie 2">
-                    <div class="carousel-overlay"></div>
-                </div>
-                <div class="carousel-slide">
-                    <img src="https://i.pinimg.com/1200x/74/7f/42/747f42bfcf727ee39f21662ebcc8a186.jpg" alt="Movie 3">
-                    <div class="carousel-overlay"></div>
-                </div>
-            </div>
-            <button class="carousel-btn carousel-prev" id="carouselPrev" aria-label="Previous slide">
-                <i class="fas fa-chevron-left"></i>
-            </button>
-            <button class="carousel-btn carousel-next" id="carouselNext" aria-label="Next slide">
-                <i class="fas fa-chevron-right"></i>
-            </button>
-            <div class="carousel-indicators">
-                <span class="indicator active" data-slide="0"></span>
-                <span class="indicator" data-slide="1"></span>
-                <span class="indicator" data-slide="2"></span>
-            </div>
-        </div>
-
         <!-- Search Bar Overlay -->
-        <div class="search-overlay">
-            <div class="container">
-                <div class="search-box">
-                    <i class="fas fa-search search-icon"></i>
-                    <input type="text" class="search-input" placeholder="Search movies, theaters, events…">
-                    <button class="search-btn">Search</button>
-                </div>
-            </div>
-        </div>
+        
     </section>
 
     <!-- Location & Filters -->
