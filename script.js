@@ -17,90 +17,8 @@ if (mobileMenuToggle && navMenu) {
     });
 }
 
-// ============================================
-// Carousel Functionality
-// ============================================
-const carouselSlides = document.getElementById('carouselSlides');
-const carouselPrev = document.getElementById('carouselPrev');
-const carouselNext = document.getElementById('carouselNext');
-const indicators = document.querySelectorAll('.indicator');
+// Hero Carousel functionality removed
 
-let currentSlide = 0;
-let carouselInterval;
-
-if (carouselSlides) {
-    const slides = carouselSlides.querySelectorAll('.carousel-slide');
-    const totalSlides = slides.length;
-
-    function showSlide(index) {
-        slides.forEach((slide, i) => {
-            slide.classList.remove('active');
-            if (i === index) {
-                slide.classList.add('active');
-            }
-        });
-
-        // Update indicators
-        indicators.forEach((indicator, i) => {
-            indicator.classList.toggle('active', i === index);
-        });
-
-        currentSlide = index;
-    }
-
-    function nextSlide() {
-        const next = (currentSlide + 1) % totalSlides;
-        showSlide(next);
-    }
-
-    function prevSlide() {
-        const prev = (currentSlide - 1 + totalSlides) % totalSlides;
-        showSlide(prev);
-    }
-
-    function startCarousel() {
-        carouselInterval = setInterval(nextSlide, 5000);
-    }
-
-    function stopCarousel() {
-        clearInterval(carouselInterval);
-    }
-
-    if (carouselNext) {
-        carouselNext.addEventListener('click', () => {
-            nextSlide();
-            stopCarousel();
-            startCarousel();
-        });
-    }
-
-    if (carouselPrev) {
-        carouselPrev.addEventListener('click', () => {
-            prevSlide();
-            stopCarousel();
-            startCarousel();
-        });
-    }
-
-    // Indicator clicks
-    indicators.forEach((indicator, index) => {
-        indicator.addEventListener('click', () => {
-            showSlide(index);
-            stopCarousel();
-            startCarousel();
-        });
-    });
-
-    // Auto-play carousel
-    startCarousel();
-
-    // Pause on hover
-    const carouselContainer = document.querySelector('.carousel-container');
-    if (carouselContainer) {
-        carouselContainer.addEventListener('mouseenter', stopCarousel);
-        carouselContainer.addEventListener('mouseleave', startCarousel);
-    }
-}
 
 // ============================================
 // Movie Carousel Horizontal Scroll
@@ -156,25 +74,11 @@ movieCarousels.forEach(carousel => {
 // ============================================
 // Booking Tabs
 // ============================================
-const tabButtons = document.querySelectorAll('.tab-btn');
-const tabContents = document.querySelectorAll('.tab-content');
+// ============================================
+// Booking Tabs
+// ============================================
+// Tab functionality is handled in DOMContentLoaded below
 
-tabButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        const targetTab = button.getAttribute('data-tab');
-
-        // Remove active class from all buttons and contents
-        tabButtons.forEach(btn => btn.classList.remove('active'));
-        tabContents.forEach(content => content.classList.remove('active'));
-
-        // Add active class to clicked button and corresponding content
-        button.classList.add('active');
-        const targetContent = document.getElementById(`${targetTab}Tab`);
-        if (targetContent) {
-            targetContent.classList.add('active');
-        }
-    });
-});
 
 // ============================================
 // Date Selector
@@ -209,12 +113,12 @@ timeSlots.forEach(slot => {
 });
 
 // ============================================
-// Search Functionality
+// Header Search Functionality
 // ============================================
 const searchToggle = document.getElementById('searchToggle');
 const headerSearch = document.getElementById('headerSearch');
 const searchInput = document.querySelector('.header-search-input'); // Reusing variable name
-const searchBtn = document.querySelector('.header-search-btn');
+const searchBtn = document.querySelector('.header-search-btn');   // Reusing variable name
 
 if (searchToggle && headerSearch) {
     searchToggle.addEventListener('click', (e) => {
@@ -224,21 +128,20 @@ if (searchToggle && headerSearch) {
             searchInput.focus();
         }
     });
+
     // Close when clicking outside
     document.addEventListener('click', (e) => {
         if (!headerSearch.contains(e.target) && !searchToggle.contains(e.target)) {
             headerSearch.classList.remove('active');
         }
     });
-}// Reusing variable name
+}
 
 if (searchInput && searchBtn) {
     function performSearch() {
         const query = searchInput.value.trim();
         if (query) {
-            // In a real application, this would trigger a search
             console.log('Searching for:', query);
-            // You could redirect to a search results page or filter movies
             alert(`Searching for: ${query}`);
         }
     }
@@ -254,7 +157,10 @@ if (searchInput && searchBtn) {
 // ============================================
 // Smooth Scroll for Anchor Links
 // ============================================
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+// ============================================
+// Smooth Scroll for Anchor Links
+// ============================================
+document.querySelectorAll('a[href^="#"]:not(.nav-link)').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         const href = this.getAttribute('href');
         if (href !== '#' && href !== '') {
@@ -332,19 +238,7 @@ movieCards.forEach(card => {
 // ============================================
 // Notification Bell Animation
 // ============================================
-const notificationBtn = document.querySelector('.icon-btn[aria-label="Notifications"]');
-
-if (notificationBtn) {
-    notificationBtn.addEventListener('click', () => {
-        notificationBtn.style.animation = 'shake 0.5s';
-        setTimeout(() => {
-            notificationBtn.style.animation = '';
-        }, 500);
-
-        // In a real application, this would show notifications
-        console.log('Notifications clicked');
-    });
-}
+// Notification functionality moved to navigation.js to prevent duplicate listeners
 
 // Add shake animation
 const style = document.createElement('style');
@@ -563,5 +457,11 @@ function closeModal() {
     const modal = document.querySelector('.modal-overlay');
     if (modal) {
         modal.remove();
+        document.body.style.overflow = ''; // Fix scroll lock
+
+        // Fix memory leak: Remove the global escape listener if it exists
+        if (window.handleEscKey) {
+            document.removeEventListener('keydown', window.handleEscKey);
+        }
     }
 }
