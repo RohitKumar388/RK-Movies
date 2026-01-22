@@ -15,7 +15,8 @@ A modern, user-friendly movie booking website UI inspired by BookMyShow and Dist
 - **Upcoming Releases** section
 - **My Bookings** dashboard with upcoming and past bookings
 - **Footer** with contact info, links, and social icons
-<img width="2816" height="1536" alt="icon assembly (1)" src="https://github.com/user-attachments/assets/c5723257-1650-48a7-9ef8-53c570078abf" />
+<img width<img width="2816" height="1536" alt="icon assembly (1) (1)" src="https://github.com/user-attachments/assets/fdf407c8-acca-4612-930f-e1bf78c3fc55" />
+="2816" height="1536" alt="icon assembly (1)" src="https://github.com/user-attachments/assets/c5723257-1650-48a7-9ef8-53c570078abf" />
 
 ### 🎭 Movie Detail Page
 - Large movie poster with rating
@@ -150,6 +151,7 @@ This project is open source and available for personal and commercial use.
 ---
 
 **Built with ❤️ for modern movie booking experiences**
+
 
 
 
