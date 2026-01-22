@@ -2,53 +2,69 @@
 // Navigation Handler for All Pages
 // ============================================
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
+    // Restore UI state
+    if (typeof updateNavigationUI === 'function') {
+        updateNavigationUI();
+    }
+
     // Handle navigation link clicks
     const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
-    
+
     navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
+        link.addEventListener('click', function (e) {
             e.preventDefault();
             const targetId = this.getAttribute('href').substring(1);
             handleNavigation(targetId);
         });
     });
-    
+
     // Handle Sign In
     const signInLinks = document.querySelectorAll('a[href="#signin"]');
     signInLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
+        link.addEventListener('click', function (e) {
             e.preventDefault();
             showSignInModal();
         });
     });
-    
+
     // Handle Profile Button
     const profileBtn = document.querySelector('.profile-btn');
     if (profileBtn) {
-        profileBtn.addEventListener('click', function(e) {
+        profileBtn.addEventListener('click', function (e) {
             e.preventDefault();
             handleProfileClick();
         });
     }
-    
+
     // Handle Notifications Button
     const notificationsBtn = document.querySelector('.icon-btn[aria-label="Notifications"]');
     if (notificationsBtn) {
-        notificationsBtn.addEventListener('click', function(e) {
+        notificationsBtn.addEventListener('click', function (e) {
             e.preventDefault();
+            e.stopImmediatePropagation();
+
+            // Add shake animation
+            this.style.animation = 'shake 0.5s';
+            setTimeout(() => {
+                this.style.animation = '';
+            }, 500);
+
             showNotificationsModal();
         });
     }
 });
 
 function handleNavigation(sectionId) {
-    switch(sectionId) {
+    switch (sectionId) {
         case 'about':
             showAboutModal();
             break;
         case 'help':
             showHelpModal();
+            break;
+        case 'import':
+            showImportModal();
             break;
         case 'settings':
             showSettingsModal();
@@ -89,12 +105,9 @@ function scrollToBookings() {
 // ============================================
 
 function createModal(title, content) {
-    // Remove existing modal if any
-    const existingModal = document.getElementById('globalModal');
-    if (existingModal) {
-        existingModal.remove();
-    }
-    
+    // Remove existing modal if any (triggers cleanup)
+    closeModal();
+
     const modal = document.createElement('div');
     modal.id = 'globalModal';
     modal.className = 'modal-overlay';
@@ -111,32 +124,31 @@ function createModal(title, content) {
             </div>
         </div>
     `;
-    
+
     document.body.appendChild(modal);
     document.body.style.overflow = 'hidden';
-    
+
     // Close on overlay click
-    modal.addEventListener('click', function(e) {
+    modal.addEventListener('click', function (e) {
         if (e.target === modal) {
             closeModal();
         }
     });
-    
-    // Close on ESC key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeModal();
-        }
-    });
+
+    // Close on ESC key (add global named listener)
+    if (!window.handleEscKey) {
+        window.handleEscKey = function (e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        };
+    }
+    document.addEventListener('keydown', window.handleEscKey);
 }
 
-function closeModal() {
-    const modal = document.getElementById('globalModal');
-    if (modal) {
-        modal.remove();
-        document.body.style.overflow = '';
-    }
-}
+// NOTE: closeModal is defined in script.js which overwrites any local definition.
+// We are relying on the global closeModal from script.js to handle cleanup.
+
 
 // ============================================
 // About Modal
@@ -529,45 +541,59 @@ function showSignUp() {
     createModal('Sign Up', content);
 }
 
+const ADMIN_EMAIL = 'admin@rkmovies.com';
+const ADMIN_PASS = 'admin123';
+
 function handleSignIn(event) {
     event.preventDefault();
-    
+
     const email = document.getElementById('signinEmail').value;
     const password = document.getElementById('signinPassword').value;
-    
+
     if (!email || !password) {
         alert('Please fill in all fields.');
         return;
     }
-    
+
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email) && !/^\d{10}$/.test(email)) {
         alert('Please enter a valid email or phone number.');
         return;
     }
-    
-    alert('Sign in successful! Welcome back to RK Movies.');
-    localStorage.setItem('userSignedIn', 'true');
+
+    // Check for Admin
+    if (email === ADMIN_EMAIL && password === ADMIN_PASS) {
+        localStorage.setItem('userSignedIn', 'true');
+        localStorage.setItem('isAdmin', 'true');
+        alert('Welcome Admin! Import controls enabled.');
+    } else {
+        // Regular User
+        alert('Sign in successful! Welcome back to RK Movies.');
+        localStorage.setItem('userSignedIn', 'true');
+        localStorage.removeItem('isAdmin'); // Ensure no stray admin rights
+    }
+
+    updateNavigationUI();
     closeModal();
 }
 
 function handleSignUp(event) {
     event.preventDefault();
-    
+
     const password = document.getElementById('signupPassword').value;
     const confirmPassword = document.getElementById('signupConfirmPassword').value;
-    
+
     if (password !== confirmPassword) {
         alert('Passwords do not match. Please try again.');
         return;
     }
-    
+
     if (password.length < 6) {
         alert('Password must be at least 6 characters long.');
         return;
     }
-    
+
     alert('Sign up successful! Please check your email for verification.');
     closeModal();
 }
@@ -576,15 +602,51 @@ function handleGoogleSignIn() {
     // In a real application, this would integrate with Google OAuth
     alert('Google sign-in successful! Welcome to RK Movies.');
     localStorage.setItem('userSignedIn', 'true');
+    localStorage.removeItem('isAdmin');
+    updateNavigationUI();
     closeModal();
-    // You could update the UI to show user is signed in
+}
+
+function updateNavigationUI() {
+    const isAdmin = localStorage.getItem('isAdmin') === 'true';
+    const navMenu = document.getElementById('navMenu');
+
+    // Check if Import link exists
+    let importLink = document.querySelector('a[href="#import"]');
+
+    if (isAdmin) {
+        // Add Import link if not present
+        if (!importLink) {
+            importLink = document.createElement('a');
+            importLink.href = '#import';
+            importLink.className = 'nav-link';
+            importLink.textContent = 'Import';
+
+            // Insert before Sign In (which is usually the last one)
+            const signInLink = document.querySelector('a[href="#signin"]');
+            if (signInLink && navMenu) {
+                navMenu.insertBefore(importLink, signInLink);
+            }
+
+            // Add click listener
+            importLink.addEventListener('click', function (e) {
+                e.preventDefault();
+                showImportModal();
+            });
+        }
+    } else {
+        // Remove Import link if present
+        if (importLink) {
+            importLink.remove();
+        }
+    }
 }
 
 function togglePassword(inputId) {
     const input = document.getElementById(inputId);
     const toggleBtn = input.nextElementSibling;
     const icon = toggleBtn.querySelector('i');
-    
+
     if (input.type === 'password') {
         input.type = 'text';
         icon.className = 'fas fa-eye-slash';
@@ -632,7 +694,7 @@ function handleForgotPassword(event) {
 function handleProfileClick() {
     // Check if user is signed in (in a real app, this would check authentication status)
     const isSignedIn = localStorage.getItem('userSignedIn') === 'true';
-    
+
     if (isSignedIn) {
         showProfileModal();
     } else {
@@ -650,7 +712,7 @@ function showProfileModal() {
         totalBookings: 12,
         favoriteGenre: 'Action'
     };
-    
+
     const content = `
         <div class="profile-content">
             <div class="profile-header">
@@ -734,7 +796,7 @@ function showNotificationsModal() {
             read: true
         }
     ];
-    
+
     const notificationItems = notifications.map(notification => `
         <div class="notification-item ${notification.read ? 'read' : 'unread'}">
             <div class="notification-icon">
@@ -748,7 +810,7 @@ function showNotificationsModal() {
             ${!notification.read ? '<div class="notification-dot"></div>' : ''}
         </div>
     `).join('');
-    
+
     const content = `
         <div class="notifications-content">
             <div class="notifications-header">
@@ -767,7 +829,7 @@ function showNotificationsModal() {
 }
 
 function getNotificationIcon(type) {
-    switch(type) {
+    switch (type) {
         case 'booking': return 'ticket-alt';
         case 'reminder': return 'clock';
         case 'offer': return 'gift';
@@ -786,7 +848,9 @@ function viewBookingHistory() {
 
 function signOut() {
     localStorage.removeItem('userSignedIn');
+    localStorage.removeItem('isAdmin');
     alert('You have been signed out successfully.');
+    updateNavigationUI();
     closeModal();
     // In a real app, you might redirect to home page or update UI
 }
@@ -807,7 +871,7 @@ function viewAllNotifications() {
 function viewTicket(movieTitle, theater, dateTime, seats, type) {
     const bookingId = 'BK' + Math.random().toString(36).substr(2, 9).toUpperCase();
     const qrCode = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + encodeURIComponent(`Booking ID: ${bookingId}\nMovie: ${movieTitle}\nTheater: ${theater}\nDate/Time: ${dateTime}\nSeats: ${seats}`);
-    
+
     const content = `
         <div class="ticket-content">
             <div class="ticket-header">
@@ -865,4 +929,258 @@ function cancelBooking(bookingId) {
         // In a real app, this would refresh the bookings list
         location.reload();
     }
+}
+
+// ============================================
+// Import Modal (Admin)
+// ============================================
+
+const DEFAULT_API_KEY = 'f518331f'; // Hardcoded API Key
+
+function showImportModal() {
+    const savedApiKey = localStorage.getItem('omdb_api_key') || DEFAULT_API_KEY;
+
+    const content = `
+        <div class="import-content">
+            <div class="import-header">
+                <h2>Import Movie from IMDb</h2>
+                <p>Enter details to fetch movie data via OMDb API</p>
+            </div>
+            
+            <div class="form-group">
+                <label>OMDb API Key <small>(<a href="http://www.omdbapi.com/apikey.aspx" target="_blank">Get Key</a>)</small></label>
+                <div class="input-group">
+                    <input type="text" id="omdbApiKey" class="form-input" value="${savedApiKey}" placeholder="Enter your OMDb API Key">
+                    <button class="btn-secondary" onclick="saveApiKey()">Save Key</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>IMDb ID (e.g., tt0468569)</label>
+                <div class="input-group">
+                    <input type="text" id="imdbId" class="form-input" placeholder="Enter IMDb ID">
+                    <button class="btn-primary" onclick="fetchMovieFromOMDb()">Fetch Data</button>
+                </div>
+            </div>
+
+            <div id="importPreview" class="import-preview hidden">
+                <!-- Preview content will be injected here -->
+            </div>
+        </div>
+    `;
+    createModal('Import Movie', content);
+}
+
+function saveApiKey() {
+    const key = document.getElementById('omdbApiKey').value.trim();
+    if (key) {
+        localStorage.setItem('omdb_api_key', key);
+        alert('API Key saved successfully!');
+    } else {
+        alert('Please enter a valid API Key.');
+    }
+}
+
+async function fetchMovieFromOMDb() {
+    const apiKey = document.getElementById('omdbApiKey').value.trim();
+    const imdbId = document.getElementById('imdbId').value.trim();
+    const previewContainer = document.getElementById('importPreview');
+
+    if (!apiKey || !imdbId) {
+        alert('Please enter both API Key and IMDb ID.');
+        return;
+    }
+
+    // Basic UI feedback
+    previewContainer.innerHTML = '<p class="loading-text">Fetching data...</p>';
+    previewContainer.classList.remove('hidden');
+
+    try {
+        const response = await fetch(`https://www.omdbapi.com/?apikey=${apiKey}&i=${imdbId}&plot=full`);
+        const data = await response.json();
+
+        if (data.Response === 'True') {
+            displayImportPreview(data);
+        } else {
+            previewContainer.innerHTML = `<p class="error-text">Error: ${data.Error}</p>`;
+        }
+    } catch (error) {
+        console.error('Error fetching movie:', error);
+        previewContainer.innerHTML = '<p class="error-text">Network error occurred. Please try again.</p>';
+    }
+}
+
+function displayImportPreview(data) {
+    const previewContainer = document.getElementById('importPreview');
+
+    // Store data temporarily for adding
+    window.currentImportData = data;
+
+    previewContainer.innerHTML = `
+        <div class="movie-preview-card">
+            <img src="${data.Poster !== 'N/A' ? data.Poster : 'https://via.placeholder.com/300x450?text=No+Poster'}" alt="Poster" class="preview-poster" style="width: 100px; float: left; margin-right: 15px;">
+            <div class="preview-details">
+                <h3>${data.Title} (${data.Year})</h3>
+                <p><strong>Genre:</strong> ${data.Genre}</p>
+                <p><strong>Director:</strong> ${data.Director}</p>
+                <p><strong>Plot:</strong> ${data.Plot.substring(0, 150)}...</p>
+                
+                <div class="form-group mt-3">
+                    <label>Trailer URL (YouTube Embed):</label>
+                    <input type="text" id="trailerUrl" class="form-input" placeholder="https://www.youtube.com/embed/..." style="margin-bottom: 10px;">
+                    <small style="color: #666; display: block; margin-bottom: 10px;">Format: https://www.youtube.com/embed/VIDEO_ID</small>
+                </div>
+
+                <div class="form-group mt-3">
+                    <label>Set Status on Website:</label>
+                    <div class="radio-group" style="display: flex; gap: 15px; margin-top: 5px;">
+                        <label><input type="radio" name="movieStatus" value="now-showing" checked> Now Showing</label>
+                        <label><input type="radio" name="movieStatus" value="upcoming"> Upcoming</label>
+                    </div>
+                </div>
+
+                <button class="btn-primary btn-block mt-3" onclick="confirmAddMovie()" style="margin-top: 15px; width: 100%;">Add to Website</button>
+            </div>
+            <div style="clear: both;"></div>
+        </div>
+    `;
+}
+
+function confirmAddMovie() {
+    if (!window.currentImportData) {
+        alert("No data to add");
+        return;
+    }
+
+    const data = window.currentImportData;
+    const statusRadio = document.querySelector('input[name="movieStatus"]:checked');
+    const status = statusRadio ? statusRadio.value : 'now-showing';
+    const trailerUrl = document.getElementById('trailerUrl').value.trim();
+
+    // Clean durations like "142 min" -> 142
+    const duration = parseInt(data.Runtime) || 0;
+
+    const newMovie = {
+        id: data.imdbID, // Use imdbID as unique ID
+        imdbID: data.imdbID, // Explicitly add imdbID field
+        title: data.Title,
+        poster: data.Poster !== 'N/A' ? data.Poster : 'https://via.placeholder.com/300x450?text=No+Poster',
+        thumbnail: data.Poster !== 'N/A' ? data.Poster : 'https://via.placeholder.com/300x450?text=No+Poster',
+        rating: parseFloat(data.imdbRating) || 0,
+        genres: data.Genre.split(',').map(g => g.trim()),
+        duration: duration,
+        year: parseInt(data.Year) || new Date().getFullYear(),
+        language: data.Language.split(',').map(l => l.trim()),
+        synopsis: data.Plot,
+        cast: data.Actors.split(',').map(a => a.trim()),
+        status: status,
+        trailer: getYouTubeEmbedUrl(trailerUrl), // Save the trailer URL
+        releaseDate: data.Released
+    };
+
+    // Save to localStorage
+    const storedMovies = JSON.parse(localStorage.getItem('custom_movies') || '[]');
+
+    // Check for duplicates
+    if (storedMovies.some(m => m.id === newMovie.id)) {
+        alert('This movie is already in your library!');
+        return;
+    }
+
+    storedMovies.push(newMovie);
+    localStorage.setItem('custom_movies', JSON.stringify(storedMovies));
+
+    alert(`"${newMovie.title}" added successfully to ${status === 'now-showing' ? 'Now Showing' : 'Upcoming'}!`);
+
+    // Reload page to reflect changes
+    window.location.reload();
+}
+
+// ============================================
+// Edit Modal (Admin)
+// ============================================
+
+function showEditModal(movieId) {
+    const storedMovies = JSON.parse(localStorage.getItem('custom_movies') || '[]');
+    const movie = storedMovies.find(m => m.id === movieId);
+
+    if (!movie) {
+        alert("Cannot edit this movie. It might be a hardcoded movie.");
+        return;
+    }
+
+    // Store editing ID
+    window.editingMovieId = movieId;
+
+    const content = `
+        <div class="import-content">
+            <div class="import-header">
+                <h2>Edit Movie Details</h2>
+                <p>Update details for "${movie.title}"</p>
+            </div>
+            
+            <div class="form-group">
+                <label>Poster Image URL</label>
+                <input type="text" id="editPoster" class="form-input" value="${movie.poster}" placeholder="https://...">
+            </div>
+
+            <div class="form-group">
+                <label>Trailer URL (YouTube Embed)</label>
+                <input type="text" id="editTrailer" class="form-input" value="${movie.trailer || ''}" placeholder="https://www.youtube.com/embed/...">
+                <small style="color: #666; display: block; margin-top: 5px;">Format: https://www.youtube.com/embed/VIDEO_ID</small>
+            </div>
+
+            <button class="btn-primary btn-block mt-3" onclick="updateMovieData()" style="margin-top: 20px; width: 100%;">Save Changes</button>
+        </div>
+    `;
+    createModal('Edit Movie', content);
+}
+
+function updateMovieData() {
+    if (!window.editingMovieId) return;
+
+    const poster = document.getElementById('editPoster').value.trim();
+    const trailer = document.getElementById('editTrailer').value.trim();
+
+    const storedMovies = JSON.parse(localStorage.getItem('custom_movies') || '[]');
+    const movieIndex = storedMovies.findIndex(m => m.id === window.editingMovieId);
+
+    if (movieIndex !== -1) {
+        storedMovies[movieIndex].poster = poster;
+        storedMovies[movieIndex].thumbnail = poster; // Update both for consistency
+        storedMovies[movieIndex].trailer = getYouTubeEmbedUrl(trailer);
+
+        localStorage.setItem('custom_movies', JSON.stringify(storedMovies));
+        alert("Movie details updated successfully!");
+        window.location.reload();
+    } else {
+        alert("Error updating movie.");
+    }
+}
+
+function getYouTubeEmbedUrl(url) {
+    if (!url) return '';
+
+    // Handle already correct embed URLs
+    if (url.includes('youtube.com/embed/')) {
+        return url;
+    }
+
+    let videoId = '';
+
+    // Handle youtu.be short links (e.g. https://youtu.be/VIDEO_ID)
+    if (url.includes('youtu.be/')) {
+        videoId = url.split('youtu.be/')[1].split('?')[0];
+    }
+    // Handle standard watch URLs (e.g. https://www.youtube.com/watch?v=VIDEO_ID)
+    else if (url.includes('youtube.com/watch')) {
+        const urlParams = new URL(url).searchParams;
+        videoId = urlParams.get('v');
+    }
+
+    if (videoId) {
+        return `https://www.youtube.com/embed/${videoId}`;
+    }
+
+    return url; // Return original if pattern doesn't match (fallback)
 }
