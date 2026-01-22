@@ -180,6 +180,18 @@
         }
 
         function openTrailer(videoUrl) {
+            // Helper to ensure embed URL
+            let embedUrl = videoUrl;
+            if (!videoUrl.includes('embed')) {
+                if (videoUrl.includes('youtu.be/')) {
+                    const videoId = videoUrl.split('youtu.be/')[1].split('?')[0];
+                    embedUrl = `https://www.youtube.com/embed/${videoId}`;
+                } else if (videoUrl.includes('watch?v=')) {
+                    const videoId = new URLSearchParams(new URL(videoUrl).search).get('v');
+                    embedUrl = `https://www.youtube.com/embed/${videoId}`;
+                }
+            }
+
             const modal = document.createElement('div');
             modal.className = 'video-modal-overlay';
             modal.innerHTML = `
@@ -188,7 +200,7 @@
                     <i class="fas fa-times"></i>
                 </button>
                 <div class="video-container">
-                    <iframe src="${videoUrl}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                    <iframe src="${embedUrl}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                 </div>
             </div>
         `;
