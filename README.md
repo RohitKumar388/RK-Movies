@@ -3,6 +3,7 @@
 A modern, user-friendly movie booking website UI inspired by BookMyShow and District. Built with clean HTML, CSS, and JavaScript.
 
 ## Features
+![iconassembly11](https://github.com/user-attachments/assets/3aa9c664-ba10-451c-a20b-35fb6460d7d1)
 
 ### 🎬 Home Page
 - **Sticky Header** with logo, navigation, and user icons
@@ -149,5 +150,6 @@ This project is open source and available for personal and commercial use.
 ---
 
 **Built with ❤️ for modern movie booking experiences**
+
 
 
