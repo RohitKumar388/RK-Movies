@@ -124,14 +124,32 @@ const theatersData = [
 
 async function fetchMovies() {
     return new Promise(resolve => {
-        setTimeout(() => resolve(moviesData), 100);
+        setTimeout(() => {
+            const storedMovies = JSON.parse(localStorage.getItem('custom_movies') || '[]');
+            const deletedIds = JSON.parse(localStorage.getItem('deleted_movie_ids') || '[]');
+
+            const allMovies = [...storedMovies, ...moviesData];
+            const activeMovies = allMovies.filter(m => !deletedIds.includes(m.id));
+
+            resolve(activeMovies);
+        }, 100);
     });
 }
 
 async function fetchMovieById(id) {
     return new Promise(resolve => {
         setTimeout(() => {
-            const movie = moviesData.find(m => m.id === id);
+            const storedMovies = JSON.parse(localStorage.getItem('custom_movies') || '[]');
+            const deletedIds = JSON.parse(localStorage.getItem('deleted_movie_ids') || '[]');
+
+            const allMovies = [...storedMovies, ...moviesData];
+            // Even if we fetch by ID, check if it's deleted (optional, but good for direct links)
+            if (deletedIds.includes(id)) {
+                resolve(null);
+                return;
+            }
+
+            const movie = allMovies.find(m => m.id === id);
             resolve(movie || moviesData[0]); // Fallback for safety
         }, 100);
     });
