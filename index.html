@@ -63,7 +63,7 @@
     <!-- Hero Section with Banner -->
     <section class="hero">
         <div class="hero-content">
-            <img src="https://github.com/user-attachments/assets/3aa9c664-ba10-451c-a20b-35fb6460d7d1" class="popcorn" alt="RK Movies" />
+            <img src="icon assembly.png" class="popcorn" alt="" />
 
         </div>
 
@@ -225,12 +225,17 @@
         async function loadNowShowingMovies() {
             const container = document.getElementById('nowShowing');
             const nowShowingMovies = await getNowShowingMovies();
+            const isAdmin = localStorage.getItem('isAdmin') === 'true';
 
             container.innerHTML = nowShowingMovies.map(movie => `
                 <div class="movie-card">
                     <div class="movie-poster">
                         <img src="${movie.thumbnail}" alt="${movie.title}">
                         <div class="rating-badge">${movie.rating}</div>
+                        ${isAdmin ? `
+                            <button class="delete-btn" onclick="event.stopPropagation(); deleteMovie('${movie.id}', '${movie.title}')" title="Remove Movie"><i class="fas fa-trash"></i></button>
+                            <button class="edit-btn" onclick="event.stopPropagation(); showEditModal('${movie.id}')" title="Edit Movie"><i class="fas fa-pen"></i></button>
+                        ` : ''}
                         <div class="genre-tags">
                             ${movie.genres.map(genre => `<span class="tag">${genre}</span>`).join('')}
                         </div>
@@ -247,12 +252,17 @@
         async function loadUpcomingMovies() {
             const container = document.getElementById('upcomingReleases');
             const upcomingMovies = await getUpcomingMovies();
+            const isAdmin = localStorage.getItem('isAdmin') === 'true';
 
             container.innerHTML = upcomingMovies.map(movie => `
                 <div class="movie-card" onclick="window.location.href='movie-detail.html?movie=${movie.id}'">
                     <div class="movie-poster">
                         <img src="${movie.thumbnail}" alt="${movie.title}">
                         <div class="rating-badge coming-soon">Coming Soon</div>
+                        ${isAdmin ? `
+                            <button class="delete-btn" onclick="event.stopPropagation(); deleteMovie('${movie.id}', '${movie.title}')" title="Remove Movie"><i class="fas fa-trash"></i></button>
+                            <button class="edit-btn" onclick="event.stopPropagation(); showEditModal('${movie.id}')" title="Edit Movie"><i class="fas fa-pen"></i></button>
+                        ` : ''}
                         <div class="genre-tags">
                             ${movie.genres.map(genre => `<span class="tag">${genre}</span>`).join('')}
                         </div>
@@ -276,12 +286,26 @@
                 alert(`We'll notify you when "${movie.title}" is available for booking!`);
             }
         }
+
+        function deleteMovie(movieId, movieTitle) {
+            if (confirm(`Are you sure you want to remove "${movieTitle}"? This cannot be undone.`)) {
+                // Add to deleted list
+                const deletedIds = JSON.parse(localStorage.getItem('deleted_movie_ids') || '[]');
+                if (!deletedIds.includes(movieId)) {
+                    deletedIds.push(movieId);
+                    localStorage.setItem('deleted_movie_ids', JSON.stringify(deletedIds));
+                }
+
+                // Also try to remove from custom_movies if it exists there (cleanup)
+                const storedMovies = JSON.parse(localStorage.getItem('custom_movies') || '[]');
+                const updatedStored = storedMovies.filter(m => m.id !== movieId);
+                localStorage.setItem('custom_movies', JSON.stringify(updatedStored));
+
+                alert(`"${movieTitle}" has been removed.`);
+                location.reload();
+            }
+        }
     </script>
 </body>
 
 </html>
-
-
-
-
-
